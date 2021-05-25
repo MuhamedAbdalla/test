@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "0114135447/test"
+    registry = "01141354474/test"
     registryCredential = 'dockerhub'
     dockerImage = ''
     failureReportSubject = "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - FAILURE!"
