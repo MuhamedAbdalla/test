@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
     failureReportSubject = "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - FAILURE!"
-    adminEmails = ["medokingdom7@gmail.com"]
+    adminEmails = "medokingdom7@gmail.com"
     applicationReleaseVersion = '1.0.0'
   }
   agent any
@@ -51,10 +51,12 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        try {
-          sh "docker rmi $registry:" + applicationReleaseVersion
-        } catch(Exception e) {
-          unstable("Warning: ${e.message}")
+        script {
+          try {
+            sh "docker rmi $registry:" + applicationReleaseVersion
+          } catch(Exception e) {
+            unstable("Warning: ${e.message}")
+          }
         }
       }
     }
