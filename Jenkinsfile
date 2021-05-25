@@ -39,7 +39,7 @@ pipeline {
         script {
           try {
             docker.withRegistry( '', registryCredential ) {
-              dockerImage.push('latest')
+              dockerImage.push()
             }
           } catch(Exception e) {
             unstable("Warning: ${e.message}")
