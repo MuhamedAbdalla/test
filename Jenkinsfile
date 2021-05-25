@@ -17,10 +17,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          try {
+          catchError {
             dockerImage = docker.build registry + ":" + applicationReleaseVersion
-          } catch (Exception e) {
-            throw e;
           }
         }
       }
@@ -34,12 +32,10 @@ pipeline {
     stage('Pushing Image To Dockerhub') {
       steps{
         script {
-          try {
+          catchError {
             docker.withRegistry( '', registryCredential ) {
               dockerImage.push()
             }
-          } catch (Exception e) {
-              throw e;
           }
         }
       }
