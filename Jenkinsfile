@@ -20,7 +20,7 @@ pipeline {
           try {
             dockerImage = docker.build registry + ":" + applicationReleaseVersion
           } catch (Exception e) {
-            echo e.message.toString()
+            throw e;
           }
         }
       }
@@ -39,7 +39,7 @@ pipeline {
               dockerImage.push()
             }
           } catch (Exception e) {
-              echo e.message.toString()
+              throw e;
           }
         }
       }
