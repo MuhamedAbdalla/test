@@ -38,7 +38,7 @@ pipeline {
       steps {
         script {
           try {
-            docker.withRegistry( '', registryCredential ) {
+            docker.withRegistry('', registryCredential ) {
               dockerImage.push()
             }
           } catch(Exception e) {
