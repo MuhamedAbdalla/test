@@ -4,7 +4,7 @@ WORKDIR /test/server
 
 COPY package*.json ./
 RUN npm ci -qy
-RUN npm instal --production=false
+RUN npm install --production=false
 
 COPY . .
 

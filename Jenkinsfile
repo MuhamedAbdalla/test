@@ -11,42 +11,44 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git branch: 'main', credentialsId: 'git', url: 'https://github.com/MuhamedAbdalla/test.git'
+        script {
+          try {
+            git branch: 'main', credentialsId: 'git', url: 'https://github.com/MuhamedAbdalla/test.git'
+          } catch (Exception e) {
+            unstable("Warning: ${e.message}")
+          }   
+        }
       }
     }
     stage('Building image') {
-      steps{
+      steps {
         script {
           catchError {
             dockerImage = docker.build registry + ":" + applicationReleaseVersion
           }
         }
       }
-      // call if error occur while building the image
       post {
         failure {
-          emailext subject: failureReportSubject, to: adminEmails, body: "Throwing exception: ${e.message} in build stage!"
+          emailext (subject: failureReportSubject, to: adminEmails, replyTo: adminEmails, body: "There is a failure in build stage.\nCheck the logs now!", attachLog: true)
         }
       }
     }
     stage('Pushing Image To Dockerhub') {
-      steps{
+      steps {
         script {
-          catchError {
+          try {
             docker.withRegistry( '', registryCredential ) {
-              dockerImage.push()
+              dockerImage.push('latest')
             }
+          } catch(Exception e) {
+            unstable("Warning: ${e.message}")
           }
-        }
-      }
-      post {
-        failure {
-          emailext subject: failureReportSubject, to: adminEmails, body: "Throwing exception: ${e.message} in Pushing stage!"
         }
       }
     }
     stage('Remove Unused docker image') {
-      steps{
+      steps {
         script {
           try {
             sh "docker rmi $registry:" + applicationReleaseVersion
