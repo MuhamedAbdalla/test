@@ -6,6 +6,7 @@ pipeline {
     failureReportSubject = "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - FAILURE!"
     adminEmails = "medokingdom7@gmail.com"
     applicationReleaseVersion = '1.0.0'
+    kubeconfigId = "kubeconfigId"
   }
   agent any
   stages {
@@ -62,8 +63,8 @@ pipeline {
       steps {
         script {
           try {
-            kubernetesDeploy(configs: "load-balance.yml")
-            kubernetesDeploy(configs: "service-deployment.yml")
+            kubernetesDeploy(configs: "load-balance.yml", kubeconfigId: kubeconfigId)
+            kubernetesDeploy(configs: "service-deployment.yml", kubeconfigId: kubeconfigId)
           } catch(Exception e) {
             unstable("Warning: ${e.message}")
           }
