@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+  labels:
+    app: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      name: test
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test-container
+        image: 01141354474/test
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "200m"
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
