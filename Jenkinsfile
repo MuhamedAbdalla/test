@@ -58,5 +58,17 @@ pipeline {
         }
       }
     }
+    stage("Deploying") {
+      steps {
+        script {
+          try {
+            kubernetesDeploy(configs: "load-balance.yml")
+            kubernetesDeploy(configs: "service-deployment.yml")
+          } catch(Exception e) {
+            unstable("Warning: ${e.message}")
+          }
+        }
+      }
+    }
   }
 }
